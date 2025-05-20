@@ -43,8 +43,8 @@ class SpiralGeometry:
         - Wenn `source_definitions` None ist → Standard-PSF: 1 Quelle bei (0,0,0).
         - Sonst erwartet: Liste von Dicts mit keys: 'loc', 'rms', 'seed'.
         """
-        # Nicht Teil der Aufgabendefinition ist aber für den workflow in Acoular wichtig, da keine PointSpreadFunction definiert?
-        # hier müsste man mit der PointSpreadFunction aus Spectacular arbeiten, dann kann man die Quellen ignorieren!
+        # Nicht Teil der Aufgabendefinition!
+        # hier müsste man mit der PointSpreadFunction arbeiten, dann kann man die Quellen ignorieren!
         num_samples = int(sfreq * duration)
 
         if source_definitions is None:

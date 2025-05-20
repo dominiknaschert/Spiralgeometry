@@ -25,15 +25,17 @@ def main():
 
     # Quelle erzeugen (default: selbst erzeugte PSF mit Quelle bei (0,0,0))
     #-----------------------------------------------------------
-    # Nach Saradj sollen wir die PointSpreadFunction benutzen und keine eigenen Quellen erzeugen. Allerdings gibt es in Acoular keine PointspreadFunction?
-    # --> die Spectacular Bibliothek hat eine PointSpreadFunction, die wir hier verwenden können/sollen.
+    # Nach Saradj sollen wir die PointSpreadFunction benutzen und keine eigenen Quellen erzeugen. 
 
-    # Nach Acoular kann man mit relativ wenig Zeilen eine PointSpreadFunction Simulieren und eine gleiche ähnliche Ausgabe erzeugen. Ist aber nicht im Scope unseres Projektes!
+    # Man kann mit relativ wenig Zeilen eine PointSpreadFunction Simulieren und eine gleiche ähnliche Ausgabe erzeugen. Ist aber nicht im Scope unseres Projektes!
+    # Allerdings verwirrend weil es gibt nur zu dem Workflow mit Quellen beispiele in der Dokumentation von Acoular und keines zu der PSF.
+    # --> scheint zudem ein spezielles feature für Spectacular zu sein.
     source = spiral.create_sources(duration=1.0, source_definitions=None)
 
     # MicGeom direkt aus dem Spiral-Objekt holen, Das funktioniert weil wir in der Init direkt mit den Eingabeparametern des Objektes das Objekt generieren:
     # mit einer Methode as_MicGeom können wir das Objekt dann übergeben heißt wir brauchen kein MicGeom Objekt selber mehr erzeugen.
     # --> Wurde mir Sarradj am 20.05 besprochen (bester Ansatz)
+    # --> Außerdem: Einzahlwerte können einfach als Methode der Pointspreadfunction etabliert werden.
     mg = spiral.as_MicGeom()
 
 
