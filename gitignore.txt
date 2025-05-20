@@ -1,0 +1,27 @@
+# files and file types to ignore
+*.pyc
+*.pyd
+*.so
+*~
+examples/three_sources.h5
+examples/all_bf.sav
+MANIFEST
+
+# ignore the build directories
+*.egg-info/
+.eggs/
+build/
+__pycache__/
+dist/
+cache/
+td/
+docs/build/
+**/cache/
+**/td/
+__pycache__/
+*.nbc
+*.nbi
+*.pyd
+docs/source/api_ref/generated/
+
+acoular/demo/three_sources.h5
