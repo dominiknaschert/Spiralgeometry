@@ -12,25 +12,16 @@ def main():
     # Spiralgeometry-Objekt erstellen
     #-----------------------------------------------------------
     # Beispeil: SpiralGeometry-Objekt mit 64 Mikrofonen, Radius 1.0 und V=3.0 erstellen
-    spiral = SpiralGeometry(num_mics=64, R=1.0, V=1.5)
+    spiral = SpiralGeometry(num_mics=64, R=1.0, V=5.0, H=1.0)
 
     # Spiral-Positionen als xml exportieren
     spiral.export_geometry_xml('spiral_geometry.xml')
 
 
-    # Quelle erzeugen (default: selbst erzeugte PSF mit Quelle bei (0,0,0))
-    #-----------------------------------------------------------
-    # Nach Saradj sollen wir die PointSpreadFunction benutzen und keine eigenen Quellen erzeugen. 
-
-    # Man kann mit relativ wenig Zeilen eine PointSpreadFunction Simulieren und eine gleiche ähnliche Ausgabe erzeugen. Ist aber nicht im Scope unseres Projektes!
-    # Allerdings verwirrend weil es gibt nur zu dem Workflow mit Quellen beispiele in der Dokumentation von Acoular und keines zu der PSF.
-    # --> scheint zudem ein spezielles feature für Spectacular zu sein.
-
-
     # MicGeom direkt aus dem Spiral-Objekt holen, Das funktioniert weil wir in der Init direkt mit den Eingabeparametern des Objektes das Objekt generieren:
-    # mit einer Methode as_MicGeom können wir das Objekt dann übergeben heißt wir brauchen kein MicGeom Objekt selber mehr erzeugen.
+    # mit der Methode as_MicGeom können wir das Objekt dann übergeben, heißt wir brauchen kein MicGeom Objekt selber mehr erzeugen.
     # --> Wurde mir Sarradj am 20.05 besprochen (bester Ansatz)
-    # --> Außerdem: Einzahlwerte können einfach als Methode der Pointspreadfunction etabliert werden.
+    # --> Außerdem: Einzahlwerte können einfach als Methode der PointSpreadFunction etabliert werden.
     mg = spiral.as_MicGeom()
 
 
