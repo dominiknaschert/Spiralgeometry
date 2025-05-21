@@ -2,6 +2,9 @@
 *.pyc
 *.pyd
 *.so
+*.h5
+*.xml
+*.DS_Store
 *~
 examples/three_sources.h5
 examples/all_bf.sav
