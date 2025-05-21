@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import acoular as ac
 
 from Spiralgeometrie import SpiralGeometry # SpiralGeometry-Klasse importieren
+from Hilfsfunktionen import plot_psf_2d # Hilfsfunktionen importieren
 
 
 def main():
@@ -11,17 +12,11 @@ def main():
     # Spiralgeometry-Objekt erstellen
     #-----------------------------------------------------------
     # Beispeil: SpiralGeometry-Objekt mit 64 Mikrofonen, Radius 1.0 und V=3.0 erstellen
-    spiral = SpiralGeometry(num_mics=64, R=1.0, V=3.0)
+    spiral = SpiralGeometry(num_mics=64, R=1.0, V=1.5)
 
     # Spiral-Positionen als xml exportieren
     spiral.export_geometry_xml('spiral_geometry.xml')
 
-    # optional eigene Quellen definieren und an SpiralGeometry übergeben (OutofScope).
-    source_definitions = [
-        {'loc': (-0.1, -0.1, -0.3), 'rms': 1.0, 'seed': 1},
-        {'loc': (0.15, 0.0, -0.3), 'rms': 0.7, 'seed': 2},
-        {'loc': (0.0, 0.1, -0.3), 'rms': 0.5, 'seed': 3}
-    ]
 
     # Quelle erzeugen (default: selbst erzeugte PSF mit Quelle bei (0,0,0))
     #-----------------------------------------------------------
@@ -30,7 +25,7 @@ def main():
     # Man kann mit relativ wenig Zeilen eine PointSpreadFunction Simulieren und eine gleiche ähnliche Ausgabe erzeugen. Ist aber nicht im Scope unseres Projektes!
     # Allerdings verwirrend weil es gibt nur zu dem Workflow mit Quellen beispiele in der Dokumentation von Acoular und keines zu der PSF.
     # --> scheint zudem ein spezielles feature für Spectacular zu sein.
-    source = spiral.create_sources(duration=1.0, source_definitions=None)
+
 
     # MicGeom direkt aus dem Spiral-Objekt holen, Das funktioniert weil wir in der Init direkt mit den Eingabeparametern des Objektes das Objekt generieren:
     # mit einer Methode as_MicGeom können wir das Objekt dann übergeben heißt wir brauchen kein MicGeom Objekt selber mehr erzeugen.
@@ -42,22 +37,21 @@ def main():
     # Der folgende Absatz soll dann zum teil von der PointSpreadFunction übernommen werden. Details sind hier noch zu klären!
     #-----------------------------------------------------------
     # Frequenzanalyse
-    ps = ac.PowerSpectra(source=source, block_size=128, window='Hanning')
+    #ps = ac.PowerSpectra(source=source, block_size=128, window='Hanning')
     # Beamforming Setup
-    rg = ac.RectGrid(x_min=-0.4, x_max=0.4, y_min=-0.4, y_max=0.4, z=0.5, increment=0.02)
+    rg = ac.RectGrid(x_min=-0.5, x_max=0.5, y_min=-0.5, y_max=0.5, z=0.2, increment=0.02)
     st = ac.SteeringVector(grid=rg, mics=mg)
-    bf = ac.BeamformerBase(freq_data=ps, steer=st)
+    psf = ac.PointSpreadFunction(steer=st, freq=2000.0)
 
-    # Berechnung bei 2000 Hz
-    f = 2000
-    pm = bf.synthetic(f, 3)
-    Lm = ac.L_p(pm)
 
-    # Plot: Beamforming-Map 
-    plt.figure(1)
-    plt.title(f"Beamforming Map @ {f} Hz")
-    plt.imshow(Lm.T, origin='lower', vmin=Lm.max() - 20, extent=rg.extend(), interpolation='bicubic')
-    plt.colorbar(label="dB")
+    # Index für zentrale Quelle
+    psf.grid_indices = np.array([psf.steer.grid.size // 2])
+    psf.calcmode = 'single'
+
+    # 2D-Plot
+    plot_psf_2d(psf) # Die Hielfsmethode plot_psf_2d ist äquivalent zu der PointSpreadFunctionPresenter Klasse in Spectacular der man das psf-Objekt übergibt um es zu plotten.
+
+
 
     # Mikrofonpositionen anzeigen
     plt.figure(2)

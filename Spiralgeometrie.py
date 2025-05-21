@@ -1,6 +1,7 @@
 import numpy as np
 from pathlib import Path
-from acoular import MicGeom, WNoiseGenerator, PointSource, Mixer, WriteH5
+from acoular import MicGeom, WNoiseGenerator, PointSource, Mixer
+
 
 class SpiralGeometry:
     def __init__(self, num_mics=64, R=1.0, V=5.0):
@@ -18,9 +19,9 @@ class SpiralGeometry:
         Erzeugt die Positionen der Mikrofone anhand der eingabe werte des Obejktes.
         '''
         # Outsourced damit theoretisch weitere Geometrien einfacher hinzugefügt werden können.
-        m = np.arange(1, self.num_mics + 1)
-        r = self.R * np.sqrt(m / self.num_mics)
-        phi = 2 * np.pi * m * ((1 + np.sqrt(self.V)) / 2)
+        m = np.arange(1, self.num_mics + 1) # array mit den Mikrofon-IDs (1 bis num_mics)
+        r = self.R * np.sqrt(m / self.num_mics) # (8)
+        phi = 2 * np.pi * m * ((1 + np.sqrt(self.V)) / 2) # (9)
 
         x = r * np.cos(phi)
         y = r * np.sin(phi)
