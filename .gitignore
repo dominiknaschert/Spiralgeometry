@@ -1,3 +1,4 @@
+
 # files and file types to ignore
 *.pyc
 *.pyd
@@ -28,3 +29,5 @@ __pycache__/
 docs/source/api_ref/generated/
 
 acoular/demo/three_sources.h5
+
+
