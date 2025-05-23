@@ -22,10 +22,6 @@ def main():
     #-----------------------------------------------------------
     # Nach Saradj sollen wir die PointSpreadFunction benutzen und keine eigenen Quellen erzeugen. 
 
-    # Man kann mit relativ wenig Zeilen eine PointSpreadFunction Simulieren und eine gleiche ähnliche Ausgabe erzeugen. Ist aber nicht im Scope unseres Projektes!
-    # Allerdings verwirrend weil es gibt nur zu dem Workflow mit Quellen beispiele in der Dokumentation von Acoular und keines zu der PSF.
-    # --> scheint zudem ein spezielles feature für Spectacular zu sein.
-
 
     # MicGeom direkt aus dem Spiral-Objekt holen, Das funktioniert weil wir in der Init direkt mit den Eingabeparametern des Objektes das Objekt generieren:
     # mit einer Methode as_MicGeom können wir das Objekt dann übergeben heißt wir brauchen kein MicGeom Objekt selber mehr erzeugen.
