@@ -12,6 +12,8 @@ def plot_psf_2d(psf_obj, ax=None, cmap='viridis', show=True):
 
     Voraussetzung: psf_obj.grid_indices enthält genau einen Index.
 
+    --> Ersetzt die PointSpreadFunctionPresenter-Klasse in Spectacular.
+
     Parameters
     ----------
     psf_obj : PointSpreadFunction
