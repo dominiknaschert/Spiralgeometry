@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import acoular as ac
 
 from Spiralgeometrie import SpiralGeometry # SpiralGeometry-Klasse importieren
-from Hilfsfunktionen import plot_psf_2d # Hilfsfunktionen importieren
+from Hilfsfunktionen_PSFPresenter import plot_psf_2d # Hilfsfunktionen importieren
 
 
 def main():

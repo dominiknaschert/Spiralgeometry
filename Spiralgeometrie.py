@@ -3,29 +3,29 @@ from pathlib import Path
 from acoular import MicGeom, WNoiseGenerator, PointSource, Mixer
 from scipy.integrate import quad
 from scipy.optimize import least_squares
-from scipy.special import i0
+from scipy.special import i0 # Besselsche Funktion erster Art
 import matplotlib.pyplot as plt
 
 
 
 class SpiralGeometry:
-    def __init__(self, num_mics=64, R=1.0, V=5.0, H=4.0):
+    def __init__(self, num_mics=64, D=1.0, V=5.0, H=4.0):
         self.num_mics = num_mics
-        self.R = R
+        self.R = D/2 # Radius der Spirale 
         self.V = V
         self.H = H
-        self.positions = self._generate_spiral_positions()
+        self.positions = self._generate_spiral_positions() # generiert Vogelspirale
         self.micgeom = MicGeom(pos_total=self.positions)
 
     def f_H(self, H, r):
+        """
+        Berechnet die Hansen-Gewichtungsfunktion f_H(r) gemäß Gleichung (3).
+        Diese Funktion ist für die Gewichtung der Spiralverteilung der Mikrofone verantwortlich.
+        --> muss noch überarbeitet werden!
+        """
         rho = r / self.R
         inside = np.pi * H * np.sqrt(1 - rho**2)
-        return i0(inside)
-
-    
-
-
-
+        return i0(inside) # i0 --> Besselsche Funktion erster Art, modifiziert für Spiralverteilung
 
     def _generate_spiral_positions(self):
         """
@@ -37,6 +37,7 @@ class SpiralGeometry:
         H = self.H
 
         # --- Schritt 1: Integral von f_H über [0, R] (konstant über alle m) ---
+        # Ansatz funktioniert nicht Gewichtungsmethode oder integral noch falsch!
         try:
             integral_total, _ = quad(lambda r: self.f_H(H, r), 0, R)
         except Exception as e:
@@ -87,41 +88,9 @@ class SpiralGeometry:
         print(f"Spiral geometry exported to {filename}")
         return Path(filename)
 
-    def create_sources(self, source_definitions=None, sfreq=51200, duration=1.0):
-        """
-        Erzeugt PointSources für das Array.
-        
-        - Wenn `source_definitions` None ist → Standard-PSF: 1 Quelle bei (0,0,0).
-        - Sonst erwartet: Liste von Dicts mit keys: 'loc', 'rms', 'seed'.
-        """
-        # Nicht Teil der Aufgabendefinition!
-        # hier müsste man mit der PointSpreadFunction arbeiten, dann kann man die Quellen ignorieren!
-        num_samples = int(sfreq * duration)
-
-        if source_definitions is None:
-            # Standardfall: PSF-Demo mit 1 Quelle in der Mitte
-            print("No sources defined. Using default PointSource at (0, 0, 0).")
-            noise = WNoiseGenerator(sample_freq=sfreq, num_samples=num_samples, seed=1, rms=1.0)
-            return PointSource(signal=noise, mics=self.micgeom, loc=(0.0, 0.0, 0.0))
-
-        # Falls benutzerdefinierte Quellen definiert sind:
-        sources = []
-        for i, sdef in enumerate(source_definitions):
-            noise = WNoiseGenerator(sample_freq=sfreq, num_samples=num_samples,
-                                    seed=sdef.get('seed', i+1), rms=sdef.get('rms', 1.0))
-            src = PointSource(signal=noise, mics=self.micgeom, loc=sdef['loc'])
-            sources.append(src)
-
-        # Mixer verwenden, falls mehrere Quellen
-        if len(sources) == 1:
-            return sources[0]
-        else:
-            # Alle Quellen im Mixer zusammenführen
-            print(f"Creating Mixer with {len(sources)} sources.")
-            return Mixer(source=sources[0], sources=sources[1:])
 
     def as_MicGeom(self):
         """
-        Gibt das MicGeom-Objekt zurück für andere Acoular-Objekte.
+        Gibt das MicGeom-Objekt zurück.
         """
         return self.micgeom
