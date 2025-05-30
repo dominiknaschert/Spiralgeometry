@@ -12,7 +12,7 @@ def main():
     # Spiralgeometry-Objekt erstellen
     #-----------------------------------------------------------
     # Beispeil: SpiralGeometry-Objekt mit 64 Mikrofonen, Radius 1.0 und V=3.0 erstellen
-    spiral = SpiralGeometry(num_mics=64, R=1.0, V=5.0, H=1.0)
+    spiral = SpiralGeometry(num_mics=64, D=1.0, V=5.0, H=1.0)
 
     # Spiral-Positionen als xml exportieren
     spiral.export_geometry_xml('spiral_geometry.xml')
