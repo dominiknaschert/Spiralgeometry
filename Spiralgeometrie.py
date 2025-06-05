@@ -3,7 +3,7 @@ from pathlib import Path
 from acoular import MicGeom, WNoiseGenerator, PointSource, Mixer
 from scipy.integrate import quad
 from scipy.optimize import least_squares
-from scipy.special import i0 # Besselsche Funktion erster Art
+from scipy.special import i1 # Besselsche Funktion erster Art
 import matplotlib.pyplot as plt
 
 
@@ -25,7 +25,7 @@ class SpiralGeometry:
         """
         rho = r / self.R
         inside = np.pi * H * np.sqrt(1 - rho**2)
-        return i0(inside) # i0 --> Besselsche Funktion erster Art, modifiziert für Spiralverteilung
+        return i1(inside) # i0 --> Besselsche Funktion erster Art, modifiziert für Spiralverteilung
 
     def _generate_spiral_positions(self):
         """
